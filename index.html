@@ -2,19 +2,43 @@
 <html>
   <head>
     <title>Eve Online Server Status</title>
-
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap");
-    </style>
+    <!-- Halfmoon CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/halfmoon@2.0.1/css/halfmoon.min.css"
+      rel="stylesheet"
+      integrity="sha256-SsJizWSIG9JT9Qxbiy8xnYJfjCAkhEQ0hihxRn7jt2M="
+      crossorigin="anonymous"
+    />
+    <!-- Halfmoon core themes -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/halfmoon@2.0.1/css/cores/halfmoon.cores.css"
+      rel="stylesheet"
+      integrity="sha256-MAzAVJMU/ze52ZHcA8CeqRrCOVndMZlHwNeS2c73vP4="
+      crossorigin="anonymous"
+    />
+    <!-- Topcoat CSS -->
+    <link
+      id="topcoat"
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/topcoat/0.8.0/css/topcoat-mobile-dark.min.css"
+    />
 
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body class="contaier-fluid bg-body text-body">
-    <main class="container">
-      <section class="card">
-        <eve-server-status>Loading Server Status...</eve-server-status>
-      </section>
-      <script src="script.js"></script>
+  <body
+    data-bs-theme="dark"
+    data-bs-core="modern"
+    class="subpixel-antialiased text-body"
+  >
+    <main class="container" id="demo-container">
+      <article class="container-fluid">
+        <section class="card">
+          
+          <eve-server-status></eve-server-status>
+        </section>
+      </article>
     </main>
+    <script src="script.js"></script>
   </body>
 </html>

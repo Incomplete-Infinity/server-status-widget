@@ -6,25 +6,34 @@
 
 html {
   @font-face {
-    font-family: 'Fragma';
+    font-family: 'Fragma Medium';
     src: url(./fonts/fragma.ttf) format('truetype');
   }
 
   @font-face {
-    font-family: "eveSansNeueExpanded";
+    font-family: "Eve Sans Neue Expanded";
     src: url(./fonts/eveSansNeueExpanded.ttf) format('truetype');
   }
 
   @font-face {
-    font-family: "eveSansNeueCondensed";
+    font-family: "Eve Sans Neue Condensed";
     src: url(./fonts/eveSansNeueCondensed.ttf) format('truetype');
   }
 }
 
+:root {
+  --fragma: "Fragma Medium", "HelveticaNeue-Light",
+    "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande",
+    sans-serif;
+  --eve-sans-neue-expanded: "Eve Sans Neue Expanded", "HelveticaNeue-Light",
+    "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande",
+    sans-serif;
+    --eve-sans-neue-condensed: "Eve Sans Neue Condensed", "HelveticaNeue-Light", "Helvetica Neue Light",
+    "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
 body {
-  background-color: #113;
-  color: #fff;
-  font-family: 'Fragma';
+  font-family: var(--fragma);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,7 +41,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'eveSansNeueCondensed';
+  font-family: var--(eve-sans-neue-condensed);
 }
 
 eve-server-status {
@@ -43,7 +52,6 @@ eve-server-status {
   text-align: center;
   border-radius: 3px;
   border: 1px solid rgba(255, 255, 255, 1);
-  background-color: transparent;
   background-image:
     linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 40%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0.1) 100%);
   width: 350px;
@@ -58,7 +66,7 @@ eve-server-status:hover {
     0 0 15px 2px rgba(255, 255, 255, .128),
     0 0 15px 3px rgba(255, 255, 255, .064),
     0 0 15px 4px rgba(255, 255, 255, .032),
-    0 0 15px 5px rgba(255, 255, a:\Documents\Code\workspaces\eve-mail\fonts\evesansneue-condensed.ttf a:\Documents\Code\workspaces\eve-mail\fonts\eveSansNeueCondensed.ttf a:\Documents\Code\workspaces\eve-mail\fonts\eveSansNeueExpanded.ttf a:\Documents\Code\workspaces\eve-mail\fonts\fragma.ttf255, .016),
+    0 0 15px 5px rgba(255, 255, 255, .016),
     0 0 15px 6px rgba(255, 255, 255, .008),
     0 0 15px 7px rgba(255, 255, 255, .004),
     0 0 15px 8px rgba(255, 255, 255, .002),
@@ -86,7 +94,6 @@ td {
 }
 
 #server-status-header {
-  font-size: 20px;
   font-weight: bold;
   text-transform: uppercase;
   text-align: center;
@@ -97,27 +104,23 @@ td {
   font-weight: bold;
 }
 
-.online {
-  color: #00cc00;
-}
-
-.offline {
-  color: #ff0000;
-}
-
 #player-count {
-  color: #fff;
   font-size: 18px;
   font-weight: bold;
 }
 
-#uptime {
-  color: #fff;
-  font-size: 16px;
-}
-
 #version {
-  color: #999;
   font-size: 14px;
   font-style: italic;
+}
+
+#demo-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  margin: 0;
+  font: 12px;
+  text-align: center;
 }
