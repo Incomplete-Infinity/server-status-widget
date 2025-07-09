@@ -1,3 +1,7 @@
+@import url("https://cdn.jsdelivr.net/npm/halfmoon@2.0.1/css/halfmoon.min.css");
+@import url("https://cdn.jsdelivr.net/npm/halfmoon@2.0.1/css/cores/halfmoon.cores.css");
+@import url("https://unpkg.com/augmented-ui/augmented-ui.min.css");
+
 :root {
   --px: 10px;
   --fragma: "Fragma Medium", Helvetica, Arial, sans-serif;
@@ -5,7 +9,8 @@
   --eve-sans-neue-condensed: "Eve Sans Neue Condensed", Helvetica, Arial, sans-serif;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   font-family: var(--fragma);
@@ -52,7 +57,7 @@ eve-server-status table {
   width: 100%;
 }
 
-eve-server-status h2, 
+eve-server-status h2,
 eve-server-status h4 {
   text-align: center;
   margin: 0.25em 0;
@@ -61,6 +66,6 @@ eve-server-status h4 {
 
 eve-server-status:hover {
   box-shadow:
-    0 0 15px rgba(255,255,255,.5),
-    0 0 25px rgba(255,255,255,.25);
+    0 0 15px rgba(255, 255, 255, .5),
+    0 0 25px rgba(255, 255, 255, .25);
 }
