@@ -1,126 +1,66 @@
 :root {
+  --px: 10px;
+  --fragma: "Fragma Medium", Helvetica, Arial, sans-serif;
+  --eve-sans-neue-expanded: "Eve Sans Neue Expanded", Helvetica, Arial, sans-serif;
+  --eve-sans-neue-condensed: "Eve Sans Neue Condensed", Helvetica, Arial, sans-serif;
+}
+
+html, body {
   margin: 0;
   padding: 0;
-  --px: 10px;
-}
-
-html {
-  @font-face {
-    font-family: 'Fragma Medium';
-    src: url(./fonts/fragma.ttf) format('truetype');
-  }
-
-  @font-face {
-    font-family: "Eve Sans Neue Expanded";
-    src: url(./fonts/eveSansNeueExpanded.ttf) format('truetype');
-  }
-
-  @font-face {
-    font-family: "Eve Sans Neue Condensed";
-    src: url(./fonts/eveSansNeueCondensed.ttf) format('truetype');
-  }
-}
-
-:root {
-  --fragma: "Fragma Medium", "HelveticaNeue-Light",
-    "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande",
-    sans-serif;
-  --eve-sans-neue-expanded: "Eve Sans Neue Expanded", "HelveticaNeue-Light",
-    "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande",
-    sans-serif;
-    --eve-sans-neue-condensed: "Eve Sans Neue Condensed", "HelveticaNeue-Light", "Helvetica Neue Light",
-    "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-}
-
-body {
   font-family: var(--fragma);
+  background-color: #111;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var--(eve-sans-neue-condensed);
+#demo-container {
+  position: relative;
+  width: auto;
+  max-width: 100%;
+  text-align: center;
+}
+
+[data-augmented-ui] {
+  box-sizing: border-box;
 }
 
 eve-server-status {
-  display: block;
-  padding: 15px;
-  line-height: 24px;
-  padding-top: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
   text-align: center;
+  padding: 15px;
+  border: 1px solid white;
   border-radius: 3px;
-  border: 1px solid rgba(255, 255, 255, 1);
-  background-image:
-    linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 40%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0.1) 100%);
-  width: 350px;
-  transition: ease;
-  transition-duration: 600ms;
+  transition: ease 600ms;
+}
+
+eve-server-status section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+eve-server-status table {
+  margin: 0 auto;
+  text-align: left;
+  width: 100%;
+}
+
+eve-server-status h2, 
+eve-server-status h4 {
+  text-align: center;
+  margin: 0.25em 0;
+  white-space: nowrap;
 }
 
 eve-server-status:hover {
   box-shadow:
-    0 0 15px 0px rgba(255, 255, 255, .512),
-    0 0 15px 1px rgba(255, 255, 255, .256),
-    0 0 15px 2px rgba(255, 255, 255, .128),
-    0 0 15px 3px rgba(255, 255, 255, .064),
-    0 0 15px 4px rgba(255, 255, 255, .032),
-    0 0 15px 5px rgba(255, 255, 255, .016),
-    0 0 15px 6px rgba(255, 255, 255, .008),
-    0 0 15px 7px rgba(255, 255, 255, .004),
-    0 0 15px 8px rgba(255, 255, 255, .002),
-    0 0 15px 9px rgba(255, 255, 255, .001);
-  transition: ease;
-  transition-duration: 300ms;
-}
-
-table {
-  width: 100%;
-}
-
-td {
-  border: none;
-  width: 100%;
-}
-
-.column-a {
-  text-align: right;
-}
-
-.column-b {
-  text-align: left;
-  min-width: 140px;
-}
-
-#server-status-header {
-  font-weight: bold;
-  text-transform: uppercase;
-  text-align: center;
-}
-
-#status {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-#player-count {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-#version {
-  font-size: 14px;
-  font-style: italic;
-}
-
-#demo-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: auto;
-  margin: 0;
-  font: 12px;
-  text-align: center;
+    0 0 15px rgba(255,255,255,.5),
+    0 0 25px rgba(255,255,255,.25);
 }

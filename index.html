@@ -1,44 +1,148 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Eve Online Server Status</title>
-    <!-- Halfmoon CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/halfmoon@2.0.1/css/halfmoon.min.css"
-      rel="stylesheet"
-      integrity="sha256-SsJizWSIG9JT9Qxbiy8xnYJfjCAkhEQ0hihxRn7jt2M="
-      crossorigin="anonymous"
-    />
-    <!-- Halfmoon core themes -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/halfmoon@2.0.1/css/cores/halfmoon.cores.css"
-      rel="stylesheet"
-      integrity="sha256-MAzAVJMU/ze52ZHcA8CeqRrCOVndMZlHwNeS2c73vP4="
-      crossorigin="anonymous"
-    />
-    <!-- Topcoat CSS -->
-    <link
-      id="topcoat"
-      rel="stylesheet"
-      type="text/css"
-      href="https://cdnjs.cloudflare.com/ajax/libs/topcoat/0.8.0/css/topcoat-mobile-dark.min.css"
-    />
+    <head>
+        <meta charset="UTF-8" />
 
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body
-    data-bs-theme="dark"
-    data-bs-core="modern"
-    class="subpixel-antialiased text-body"
-  >
-    <main class="container" id="demo-container">
-      <article class="container-fluid">
-        <section class="card">
-          
-          <eve-server-status></eve-server-status>
-        </section>
-      </article>
-    </main>
-    <script src="script.js"></script>
-  </body>
+        <title>Eve Online Server Status</title>
+        <!-- Halfmoon CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/halfmoon@2.0.1/css/halfmoon.min.css" rel="stylesheet" integrity="sha256-SsJizWSIG9JT9Qxbiy8xnYJfjCAkhEQ0hihxRn7jt2M=" crossorigin="anonymous" />
+        <!-- Halfmoon core themes -->
+        <link href="https://cdn.jsdelivr.net/npm/halfmoon@2.0.1/css/cores/halfmoon.cores.css" rel="stylesheet" integrity="sha256-MAzAVJMU/ze52ZHcA8CeqRrCOVndMZlHwNeS2c73vP4=" crossorigin="anonymous" />
+        <!-- Topcoat CSS -->
+        <link id="topcoat" rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/topcoat/0.8.0/css/topcoat-mobile-dark.min.css" />
+
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="https://unpkg.com/augmented-ui/augmented-ui.min.css" />
+    </head>
+   <body class="subpixel-antialiased text-body" data-bs-theme="dark" data-bs-core="modern">
+  <main id="demo-container">
+    <eve-server-status data-augmented-ui="tl-clip br-clip border" class="aug-container"></eve-server-status>
+  </main>
+     <template id="eve-server-status-template">
+    <style>
+              
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--eve-sans-neue-condensed);
+}
+
+                /* Scoped styles for your component */
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th,
+                td {
+                    padding: 0.5em;
+                }
+                td {
+                    border: none;
+                    width: 100%;
+                }
+
+                .column-a {
+                    text-align: right;
+                }
+                .column-b {
+                    white-space: nowrap;
+                    text-align: left;
+                    min-width: 180px;
+                }
+
+                #server-status-header {
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    text-align: center;
+                }
+
+                #status {
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+
+                #player-count {
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+
+                #version {
+                    font-size: 14px;
+                    font-style: italic;
+                }
+
+                #demo-container {
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: auto;
+                    margin: 0;
+                    font: 12px;
+                    text-align: center;
+                }
+                #uptime {
+                    white-space: nowrap; /* prevent wrapping */
+                    min-width: 12em; /* adjust width as needed */
+                    display: inline-block; /* allow width/min-width */
+                }
+                /* Add any other styles you want scoped */
+            </style>
+  <section data-augmented-ui="tl-clip br-clip inlay">
+    <h3 class="text-center align-center pt-3" id="loading-indicator">
+      <span class="spinner-border"></span>&nbsp;Loading Server Status...
+    </h3>
+
+    <table hidden class="table table-borderless table-stripped table-striped-columns table-hover" data-augmented-ui="tl-clip br-clip none">
+      <thead>
+        <tr>
+          <th colspan="2" id="fw-header">
+            <hgroup>
+              <h2><slot name="title">Eve Online Server Status</slot></h2>
+              <h4 class="text-secondary"><slot name="subtitle">SINGULARITY</slot></h4>
+            </hgroup>
+          </th>
+        </tr>
+      </thead>
+      <tbody data-augmented-ui="tl-clip br-clip border">
+        <tr>
+          <td class="text-end">⚡&nbsp;Server&nbsp;Status&nbsp;:&nbsp;</td>
+          <td id="status" class="text-start"><slot name="server-status"></slot></td>
+        </tr>
+        <tr>
+          <td class="column-a">👨‍👩‍👧‍👦&nbsp;Player&nbsp;Count&nbsp;:&nbsp;</td>
+          <td class="column-b" id="player-count"><slot name="player-count"></slot></td>
+        </tr>
+        <tr>
+          <td class="column-a">⏱&nbsp;Uptime&nbsp;:&nbsp;</td>
+          <td class="column-b" id="uptime"><slot name="uptime"></slot></td>
+        </tr>
+        <tr>
+          <td class="column-a">🎰&nbsp;Version&nbsp;:&nbsp;</td>
+          <td class="column-b" id="version"><slot name="version"></slot></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+       <template id="uptime-template">
+  <span class="text-warning fs-5">
+    <span class="text-success fs-3" part="hours">00</span>h :
+    <span class="text-success fs-3" part="minutes">00</span>m :
+    <span class="text-success fs-3" part="seconds">00</span>s
+  </span>
+</template>
+
+<template id="player-count-template">
+  <span class="text-info" part="player-count">0</span>
+</template>
+
+<template id="server-status-template">
+  <span part="server-status">Offline 💔</span>
+</template>
+
+<template id="version-template">
+  <span class="text-muted" part="version">n/a</span>
+</template>
+
+</template>
+
+        <script src="script.js"></script>
+    </body>
 </html>

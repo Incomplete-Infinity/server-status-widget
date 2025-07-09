@@ -1,109 +1,126 @@
-const { log } = console;
-const now = () => new Date();
-const pause = (callback, milliseconds) => setTimeout(callback, milliseconds);
-
-// Helper function to calculate uptime
-const calculateUptime = (startTime, endTime) => {
-  const diff = endTime - startTime;
-  const seconds = Math.max(Math.floor(diff / 1000), 0);
-  const minutes = Math.max(Math.floor(seconds / 60), 0);
-  const hours = Math.max(Math.floor(minutes / 60), 0);
-
-  return seconds + minutes + hours > 0
-    ? `<span class="text-warning fs-5">
-         <span style="width:2em;" class="text-success fs-3">${
-        hours % 24
-      }</span>h : <span style="width:2em;" class="text-success fs-3">${
-        minutes % 60
-      }</span>m : <span style="width:2em;" class="text-success fs-3">${
-        seconds % 60
-      }</span>s</span>`
-    : `0`;
-};
-
-
-// Define the custom element
 class EveServerStatus extends HTMLElement {
+  constructor() {
+    super();
+    const tmpl = document.getElementById("eve-server-status-template").content;
+    this.appendChild(tmpl.cloneNode(true));
+  }
+
   connectedCallback() {
-    this.innerHTML = `<h3 class="text-center align-center pt-3"><span class="spinner-border"></span>&nbsp;Loading Server Status...</h3>`;
+    this.querySelector("table").hidden = true;
+    this.querySelector("#loading-indicator").hidden = false;
+
+    // Initialize display classes with their container elements
+    this.uptimeDisplay = new UptimeDisplay(this.querySelector("#uptime"));
+    this.playerCountDisplay = new PlayerCountDisplay(this.querySelector("#player-count"));
+    this.serverStatusDisplay = new ServerStatusDisplay(this.querySelector("#status"));
+    this.versionDisplay = new VersionDisplay(this.querySelector("#version"));
+
     this.fetchServerStatus();
   }
 
-  fetchServerStatus() {
-    const apiUrl =
-      "https://esi.evetech.net/latest/status/?datasource=tranquility";
+  fetchServerStatus = () => {
+    fetch("https://esi.evetech.net/latest/status/?datasource=tranquility")
+      .then(res => res.json())
+      .then(({ server_version, players, start_time }) => {
+        this.querySelector("#loading-indicator").hidden = true;
+        this.querySelector("table").hidden = false;
 
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        const { server_version, players, start_time } = data;
-        const isOnline = players > 0;
-        const serverStatus = isOnline
-          ? `<span class="text-success">Online</span>😀`
-          : `<span class="text-danger">Offline</span>💔`;
+        this.serverStatusDisplay.update(players > 0);
+        this.playerCountDisplay.update(players);
+        this.versionDisplay.update(server_version);
 
-        const playerCount = players
-          ? `<span class="text-info">${players}</span>`
-          : `<span class="text-warning">${0}</span>`;
         const startTime = new Date(start_time);
-        const uptime = calculateUptime(startTime, now());
-
-        this.innerHTML = `
-<table class="table table-borderless table-stripped table-striped-columns table-hover">
-  <thead>
-    <tr>
-      <th colspan="2" id="fw-header">
-        <h2>Eve Online Server Status</h2>
-        <h4 class="text-secondary">SINGULARITY</h4>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="text-end">⚡&nbsp;Server&nbsp;Status&nbsp;:&nbsp;</td>
-      <td id="status" class="text-start">${serverStatus}</td>
-    </tr>
-    <tr>
-      <td class="column-a">👨‍👩‍👧‍👦&nbsp;Player&nbsp;Count&nbsp;:&nbsp;</td>
-      <td class="column-b" id="player-count">${playerCount}</td>
-    </tr>
-    <tr>
-      <td class="column-a">⏱&nbsp;Uptime&nbsp;:&nbsp;</td>
-      <td class="column-b" id="uptime"><span id="uptime">${uptime}</span></td>
-    </tr>
-    <tr>
-      <td class="column-a">🎰&nbsp;Version&nbsp;:&nbsp;</td>
-      <td class="column-b" id="version">${server_version ?? "n/a"}</td>
-    </tr>
-  </tbody>
-</table>`;
-
-        this.updateUptime(startTime);
+        this.uptimeDisplay.start(startTime);
       })
       .catch(() => {
-        this.innerHTML = "Failed to retrieve server status.";
+        this.querySelector("#loading-indicator").textContent = "Failed to retrieve server status.";
       });
+  };
+}
+
+class UptimeDisplay {
+  constructor(container) {
+    this.container = container;
+    this.template = document.getElementById("uptime-template").content;
+    this.element = this.template.cloneNode(true);
+    this.container.innerHTML = "";
+    this.container.appendChild(this.element);
+    this.hours = this.container.querySelector("[part=hours]");
+    this.minutes = this.container.querySelector("[part=minutes]");
+    this.seconds = this.container.querySelector("[part=seconds]");
+    this.intervalId = null;
   }
 
-  updateUptime(startTime) {
-    const uptimeElement = this.querySelector("#uptime");
+  start(startTime) {
+    this.stop();
+    this.update(startTime);
+    this.intervalId = setInterval(() => this.update(startTime), 1000);
+  }
 
-    setInterval(() => {
-      const uptime = calculateUptime(startTime, now());
-      uptimeElement.innerHTML = uptime; // Use innerHTML instead of textContent
-    }, 1000);
+  update(startTime) {
+    const diff = Date.now() - startTime.getTime();
+    const s = Math.floor(diff / 1000) % 60;
+    const m = Math.floor(diff / 60000) % 60;
+    const h = Math.floor(diff / 3600000);
+    this.hours.textContent = String(h).padStart(2, "0");
+    this.minutes.textContent = String(m).padStart(2, "0");
+    this.seconds.textContent = String(s).padStart(2, "0");
+  }
+
+  stop() {
+    if (this.intervalId) clearInterval(this.intervalId);
   }
 }
 
-const init = () => {
-  // Define the custom element tag
-  customElements.define("eve-server-status", EveServerStatus);
+class PlayerCountDisplay {
+  constructor(container) {
+    this.container = container;
+    this.template = document.getElementById("player-count-template").content;
+  }
 
-  // Automatically update the server status every 60 seconds
-  setInterval(() => {
-    const serverStatusElement = document.querySelector("eve-server-status");
-    serverStatusElement.fetchServerStatus();
-  }, 30000);
-};
+  update(count) {
+    this.container.innerHTML = "";
+    const el = this.template.cloneNode(true);
+    el.querySelector("[part=player-count]").textContent = count || "0";
+    this.container.appendChild(el);
+  }
+}
 
-pause(init, 1000);
+class ServerStatusDisplay {
+  constructor(container) {
+    this.container = container;
+    this.template = document.getElementById("server-status-template").content;
+  }
+
+  update(isOnline) {
+    this.container.innerHTML = "";
+    const el = this.template.cloneNode(true);
+    const span = el.querySelector("[part=server-status]");
+    if (isOnline) {
+      span.textContent = "Online 😀";
+      span.classList.add("text-success");
+      span.classList.remove("text-danger");
+    } else {
+      span.textContent = "Offline 💔";
+      span.classList.add("text-danger");
+      span.classList.remove("text-success");
+    }
+    this.container.appendChild(el);
+  }
+}
+
+class VersionDisplay {
+  constructor(container) {
+    this.container = container;
+    this.template = document.getElementById("version-template").content;
+  }
+
+  update(version) {
+    this.container.innerHTML = "";
+    const el = this.template.cloneNode(true);
+    el.querySelector("[part=version]").textContent = version ?? "n/a";
+    this.container.appendChild(el);
+  }
+}
+
+customElements.define("eve-server-status", EveServerStatus);
